@@ -8,22 +8,18 @@ import '../widgets/toast.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
-User currentUser() {
-  User user = FirebaseAuth.instance.currentUser;
-  return user;
-}
-
-Future<void> signIn({BuildContext context, String email, String password}) async {
+Future<void> signIn(
+    {BuildContext context, String email, String password}) async {
   try {
     UserCredential _result = await _auth.signInWithEmailAndPassword(
         email: email, password: password);
     User user = _result.user;
     if (user != null) {
       buildToast('Signed in successfully!');
-      Navigator.of(context).pushNamedAndRemoveUntil(HomeScreen.screenId, (route) => false);
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil(HomeScreen.screenId, (route) => false);
     }
   } catch (error) {
-    print(error.toString());
     throw HttpException(error.toString());
   }
 }
@@ -47,10 +43,10 @@ Future<void> signUp(
       );
       user.updateProfile(displayName: name);
       buildToast('Signed in successfully!');
-      Navigator.of(context).pushNamedAndRemoveUntil(HomeScreen.screenId, (route) => false);
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil(HomeScreen.screenId, (route) => false);
     }
   } catch (error) {
-    print('nikunj sharma os a good boy');
     throw HttpException(error.toString());
   }
 }

@@ -28,6 +28,7 @@ dependencies:
   cloud_firestore: ^0.16.0
   firebase_storage: ^7.0.0
   fluttertoast: ^7.1.6
+  google_maps_flutter: ^1.1.1
 
 
   # The following adds the Cupertino Icons font to your application.

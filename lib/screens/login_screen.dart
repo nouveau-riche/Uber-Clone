@@ -5,6 +5,7 @@ import './signup_screen.dart';
 import '../widgets/toast.dart';
 import '../utilities/http_exception.dart';
 import '../services/authentication.dart';
+import '../widgets/progressDialog.dart';
 
 class LoginScreen extends StatelessWidget {
   static const screenId = './login_screen';
@@ -108,6 +109,11 @@ class LoginScreen extends StatelessWidget {
       child: RaisedButton(
         onPressed: () {
           try {
+
+            showDialog(context: context,builder: (context){
+              return ProgressDialog('Signing in..');
+            });
+
             if (!_emailController.text.contains('@') ||
                 _emailController.text.length <= 5) {
               buildToast('Enter Correct Email');
@@ -118,6 +124,7 @@ class LoginScreen extends StatelessWidget {
                 email: _emailController.text,
                 password: _passwordController.text);
           } on HttpException catch (error) {
+            Navigator.of(context).pop();
             var errorMessage = 'Failed! Try again Later';
 
             if (error.toString().contains('ERROR_TOO_MANY_REQUESTS')) {
@@ -131,6 +138,7 @@ class LoginScreen extends StatelessWidget {
             }
             buildToast(errorMessage);
           } catch (error) {
+            Navigator.of(context).pop();
             const errorMessage = 'Internet connection too slow';
             buildToast(errorMessage);
           }
