@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import './signup_screen.dart';
-import '../widgets/toast.dart';
-import '../utilities/http_exception.dart';
+import './login_screen.dart';
 import '../services/authentication.dart';
+import '../utilities/http_exception.dart';
+import '../widgets/toast.dart';
 
-class LoginScreen extends StatelessWidget {
-  static const screenId = './login_screen';
+class SignUpScreen extends StatelessWidget {
+  static const screenId = './signup_screen';
 
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -32,7 +34,7 @@ class LoginScreen extends StatelessWidget {
               height: mq.height * 0.01,
             ),
             Text(
-              'Login as a Rider',
+              'Register as a Rider',
               style: TextStyle(
                 fontSize: 18,
                 fontFamily: 'Brand Bold',
@@ -46,6 +48,14 @@ class LoginScreen extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  buildNameField(),
+                  SizedBox(
+                    height: mq.height * 0.01,
+                  ),
+                  buildPhoneNumberField(),
+                  SizedBox(
+                    height: mq.height * 0.01,
+                  ),
                   buildEmailField(),
                   SizedBox(
                     height: mq.height * 0.01,
@@ -54,14 +64,50 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     height: mq.height * 0.05,
                   ),
-                  buildLoginButton(mq.width * 0.7, context),
-                  buildGoToSignUpPageButton(context),
+                  buildSignUpButton(mq.width * 0.7, context),
+                  buildGoToLoginPageButton(context),
                 ],
               ),
             )
           ],
         ),
       ),
+    );
+  }
+
+  Widget buildNameField() {
+    return TextField(
+      cursorColor: Colors.black54,
+      textCapitalization: TextCapitalization.words,
+      decoration: InputDecoration(
+        focusedBorder:
+            UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+        icon: Icon(
+          Icons.person,
+          color: Colors.black54,
+        ),
+        hintText: 'Name',
+        hintStyle: TextStyle(fontFamily: 'Brand-Regular'),
+      ),
+      controller: _nameController,
+    );
+  }
+
+  Widget buildPhoneNumberField() {
+    return TextField(
+      cursorColor: Colors.black54,
+      keyboardType: TextInputType.phone,
+      decoration: InputDecoration(
+        focusedBorder:
+            UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+        icon: Icon(
+          Icons.phone,
+          color: Colors.black54,
+        ),
+        hintText: 'Phone',
+        hintStyle: TextStyle(fontFamily: 'Brand-Regular'),
+      ),
+      controller: _phoneController,
     );
   }
 
@@ -102,19 +148,31 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget buildLoginButton(double width, BuildContext context) {
+  Widget buildSignUpButton(double width, BuildContext context) {
     return SizedBox(
       width: width,
       child: RaisedButton(
         onPressed: () {
           try {
-            if (!_emailController.text.contains('@') ||
+            if (_passwordController.text.length <= 5) {
+              buildToast('Password length should be more than 5');
+              return;
+            } else if (_nameController.text.length <= 1) {
+              buildToast('name length should be more than 21');
+              return;
+            } else if (!_emailController.text.contains('@') ||
                 _emailController.text.length <= 5) {
               buildToast('Enter Correct Email');
               return;
+            } else if (_phoneController.text.length != 10) {
+              buildToast('Enter Correct Phone number');
+              return;
             }
-            signIn(
+
+            signUp(
                 context: context,
+                name: _nameController.text,
+                phone: _phoneController.text,
                 email: _emailController.text,
                 password: _passwordController.text);
           } on HttpException catch (error) {
@@ -123,11 +181,8 @@ class LoginScreen extends StatelessWidget {
             if (error.toString().contains('ERROR_TOO_MANY_REQUESTS')) {
               errorMessage = 'Too many requests. Try again Later!';
             } else if (error.toString().contains(
-                'password is invalid or the user does not have a password')) {
-              errorMessage = 'Wrong Password';
-            }else if (error.toString().contains(
-                'There is no user record corresponding to this identifier')) {
-              errorMessage = 'User not found! Create new Account';
+                'The email address is already in use by another account')) {
+              errorMessage = 'User Already Registered';
             }
             buildToast(errorMessage);
           } catch (error) {
@@ -139,9 +194,9 @@ class LoginScreen extends StatelessWidget {
         textColor: Colors.white,
         color: Colors.yellow,
         child: Text(
-          'Login',
+          'Register',
           style: TextStyle(
-            fontSize: 17,
+            fontSize: 18,
             fontFamily: 'Brand Bold',
           ),
         ),
@@ -149,15 +204,15 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget buildGoToSignUpPageButton(BuildContext context) {
+  Widget buildGoToLoginPageButton(BuildContext context) {
     return FlatButton(
       onPressed: () {
         Navigator.of(context).pushAndRemoveUntil(
-            CupertinoPageRoute(builder: (ctx) => SignUpScreen()),
+            CupertinoPageRoute(builder: (ctx) => LoginScreen()),
             (route) => false);
       },
       child: Text(
-        'Do not have an Account? Register Here.',
+        'Already have an Account? Login Here.',
         style: TextStyle(
           fontFamily: 'Brand Bold',
         ),
