@@ -1,16 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../widgets/drawer.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   static const screenId = './home_screen';
-
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  final Completer<GoogleMapController> _controllerGoogleMap = Completer();
-  GoogleMapController _newGoogleMapController;
 
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
@@ -18,33 +14,58 @@ class HomeScreen extends StatelessWidget {
   );
 
   @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  var bottomMapPadding = 0.0;
+
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final Completer<GoogleMapController> _controllerGoogleMap = Completer();
+
+  GoogleMapController _newGoogleMapController;
+
+  void locatePosition() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    LatLng latLngPosition = LatLng(position.latitude, position.longitude);
+
+    CameraPosition cameraPosition =
+        CameraPosition(target: latLngPosition, zoom: 14);
+    _newGoogleMapController.animateCamera(
+      CameraUpdate.newCameraPosition(cameraPosition),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context).size;
     return Scaffold(
       key: _scaffoldKey,
-//      appBar: AppBar(
-//        title: RaisedButton(
-//          onPressed: () {
-//            signOut();
-//            Navigator.of(context).pushNamedAndRemoveUntil(
-//                LoginScreen.screenId, (route) => false);
-//          },
-//          child: Text('signout'),
-//        ),
-//      ),
-
       drawer: Drawer(
         child: buildDrawer(context),
       ),
       body: Stack(
         children: [
           GoogleMap(
+            padding: EdgeInsets.only(
+                bottom: bottomMapPadding, top: mq.height * 0.06),
             mapType: MapType.normal,
             myLocationEnabled: true,
-            initialCameraPosition: _kGooglePlex,
+            myLocationButtonEnabled: true,
+            zoomControlsEnabled: true,
+            zoomGesturesEnabled: true,
+            initialCameraPosition: HomeScreen._kGooglePlex,
             onMapCreated: (GoogleMapController controller) {
               _controllerGoogleMap.complete(controller);
               _newGoogleMapController = controller;
+
+              locatePosition();
+              setState(() {
+                bottomMapPadding = mq.height * 0.45;
+              });
             },
           ),
           Positioned(
@@ -94,7 +115,7 @@ class HomeScreen extends StatelessWidget {
   buildChooseAddress(BuildContext context) {
     final mq = MediaQuery.of(context).size;
     return Container(
-      height: mq.height * 0.32,
+      height: mq.height * 0.45,
       padding: EdgeInsets.all(15),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
@@ -109,7 +130,6 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Column(
@@ -127,10 +147,10 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height: 6,
+            height: 14,
           ),
           Container(
-            height: mq.height * 0.04,
+            height: mq.height * 0.05,
             padding: EdgeInsets.all(4),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
@@ -154,7 +174,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 6,
+            height: 14,
           ),
           Row(
             children: [
@@ -176,7 +196,7 @@ class HomeScreen extends StatelessWidget {
                   Text(
                     'Your living home address',
                     style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 14,
                         fontFamily: 'Brand-Regular',
                         color: Colors.black54),
                   ),
@@ -213,7 +233,7 @@ class HomeScreen extends StatelessWidget {
                   Text(
                     'Your office address',
                     style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 14,
                         fontFamily: 'Brand-Regular',
                         color: Colors.black54),
                   ),

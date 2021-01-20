@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../services/authentication.dart';
+import '../screens/login_screen.dart';
+
 Widget buildDrawer(BuildContext context) {
   final mq = MediaQuery.of(context).size;
 
@@ -40,6 +43,13 @@ Widget buildDrawer(BuildContext context) {
       buildDrawerListTile('History', Icon(Icons.history)),
       buildDrawerListTile('Visit Profile', Icon(Icons.person)),
       buildDrawerListTile('About', Icon(Icons.info)),
+      GestureDetector(
+          onTap: () {
+            signOut();
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                LoginScreen.screenId, (route) => false);
+          },
+          child: buildDrawerListTile('Log Out', Icon(Icons.logout))),
     ],
   );
 }
