@@ -2,10 +2,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../widgets/drawer.dart';
+
 class HomeScreen extends StatelessWidget {
   static const screenId = './home_screen';
 
-  Completer<GoogleMapController> _controllerGoogleMap = Completer();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final Completer<GoogleMapController> _controllerGoogleMap = Completer();
   GoogleMapController _newGoogleMapController;
 
   static final CameraPosition _kGooglePlex = CameraPosition(
@@ -15,7 +19,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mq = MediaQuery.of(context).size;
     return Scaffold(
+      key: _scaffoldKey,
 //      appBar: AppBar(
 //        title: RaisedButton(
 //          onPressed: () {
@@ -26,8 +32,9 @@ class HomeScreen extends StatelessWidget {
 //          child: Text('signout'),
 //        ),
 //      ),
-      appBar: AppBar(
-        title: Text('nikunj'),
+
+      drawer: Drawer(
+        child: buildDrawer(context),
       ),
       body: Stack(
         children: [
@@ -41,12 +48,45 @@ class HomeScreen extends StatelessWidget {
             },
           ),
           Positioned(
+            top: mq.height * 0.06,
+            left: 20,
+            child: buildDrawerIcon(),
+          ),
+          Positioned(
             bottom: 0,
             left: 0,
             right: 0,
             child: buildChooseAddress(context),
           ),
         ],
+      ),
+    );
+  }
+
+  buildDrawerIcon() {
+    return InkWell(
+      onTap: () {
+        _scaffoldKey.currentState.openDrawer();
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black54,
+                offset: Offset(0.7, 0.7),
+                blurRadius: 6,
+                spreadRadius: 0.7)
+          ],
+        ),
+        child: CircleAvatar(
+          radius: 20,
+          backgroundColor: Colors.white,
+          child: Icon(
+            Icons.menu,
+            color: Colors.black,
+          ),
+        ),
       ),
     );
   }
@@ -62,7 +102,7 @@ class HomeScreen extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-              color: Colors.black54,
+              color: Colors.black38,
               blurRadius: 6,
               spreadRadius: 6,
               offset: Offset.zero),
@@ -72,13 +112,19 @@ class HomeScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Hi there',
-            style: TextStyle(fontFamily: 'Brand-Regular'),
-          ),
-          Text(
-            'Where to?',
-            style: TextStyle(fontSize: 19, fontFamily: 'Brand-Regular'),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Hi there',
+                style: TextStyle(fontFamily: 'Brand-Regular'),
+              ),
+              Text(
+                'Where to?',
+                style: TextStyle(fontSize: 19, fontFamily: 'Brand-Regular'),
+              ),
+            ],
           ),
           SizedBox(
             height: 6,
@@ -141,7 +187,9 @@ class HomeScreen extends StatelessWidget {
           SizedBox(
             height: 3,
           ),
-          Divider(color: Colors.black26,),
+          Divider(
+            color: Colors.black26,
+          ),
           SizedBox(
             height: 3,
           ),
