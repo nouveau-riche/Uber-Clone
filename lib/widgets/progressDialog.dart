@@ -8,27 +8,29 @@ class ProgressDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5),),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5),
+      ),
       backgroundColor: Colors.yellow,
       child: Container(
         height: 70,
-        margin: EdgeInsets.all(10),
+        margin: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Colors.white,
-         borderRadius: BorderRadius.circular(2),
+          borderRadius: BorderRadius.circular(2),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(
+            const CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation(Colors.black),
             ),
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
             Text(
               message,
-              style: TextStyle(fontFamily: 'Brand-Regular',fontSize: 17),
+              style: const TextStyle(fontFamily: 'Brand-Regular', fontSize: 17),
             ),
           ],
         ),

@@ -93,9 +93,9 @@ class _HomeScreenState extends State<HomeScreen> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
-            BoxShadow(
+            const BoxShadow(
                 color: Colors.black54,
-                offset: Offset(0.7, 0.7),
+                offset: const Offset(0.7, 0.7),
                 blurRadius: 6,
                 spreadRadius: 0.7)
           ],
@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: CircleAvatar(
           radius: 20,
           backgroundColor: Colors.white,
-          child: Icon(
+          child: const Icon(
             Icons.menu,
             color: Colors.black,
           ),
@@ -116,13 +116,14 @@ class _HomeScreenState extends State<HomeScreen> {
     final mq = MediaQuery.of(context).size;
     return Container(
       height: mq.height * 0.45,
-      padding: EdgeInsets.all(15),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.all(15),
+      decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+            topLeft: const Radius.circular(10),
+            topRight: const Radius.circular(10)),
         color: Colors.white,
         boxShadow: [
-          BoxShadow(
+          const BoxShadow(
               color: Colors.black38,
               blurRadius: 6,
               spreadRadius: 6,
@@ -136,27 +137,28 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Hi there',
-                style: TextStyle(fontFamily: 'Brand-Regular'),
+                style: const TextStyle(fontFamily: 'Brand-Regular'),
               ),
-              Text(
+              const Text(
                 'Where to?',
-                style: TextStyle(fontSize: 19, fontFamily: 'Brand-Regular'),
+                style:
+                    const TextStyle(fontSize: 19, fontFamily: 'Brand-Regular'),
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 14,
           ),
           Container(
             height: mq.height * 0.05,
-            padding: EdgeInsets.all(4),
+            padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
               color: Colors.white,
               boxShadow: [
-                BoxShadow(
+                const BoxShadow(
                     color: Colors.black12,
                     blurRadius: 2,
                     spreadRadius: 2,
@@ -165,37 +167,38 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             child: Row(
               children: [
-                Icon(Icons.search),
-                Text(
+                const Icon(Icons.search),
+                const Text(
                   'Search Drop Off',
-                  style: TextStyle(fontFamily: 'Brand Bold'),
+                  style: const TextStyle(fontFamily: 'Brand Bold'),
                 ),
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 14,
           ),
           Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.home,
                 color: Colors.black45,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
+                  const Text(
                     'Add Home',
-                    style: TextStyle(fontSize: 17, fontFamily: 'Brand Bold'),
+                    style:
+                        const TextStyle(fontSize: 17, fontFamily: 'Brand Bold'),
                   ),
-                  Text(
+                  const Text(
                     'Your living home address',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 14,
                         fontFamily: 'Brand-Regular',
                         color: Colors.black54),
@@ -204,18 +207,18 @@ class _HomeScreenState extends State<HomeScreen> {
               )
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 3,
           ),
-          Divider(
+          const Divider(
             color: Colors.black26,
           ),
-          SizedBox(
+          const SizedBox(
             height: 3,
           ),
           Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.work,
                 color: Colors.black45,
               ),
@@ -226,13 +229,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Add Work',
-                    style: TextStyle(fontSize: 17, fontFamily: 'Brand Bold'),
+                    style:
+                        const TextStyle(fontSize: 17, fontFamily: 'Brand Bold'),
                   ),
-                  Text(
+                  const Text(
                     'Your office address',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 14,
                         fontFamily: 'Brand-Regular',
                         color: Colors.black54),

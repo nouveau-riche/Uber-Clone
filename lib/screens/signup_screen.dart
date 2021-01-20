@@ -34,9 +34,9 @@ class SignUpScreen extends StatelessWidget {
             SizedBox(
               height: mq.height * 0.01,
             ),
-            Text(
+            const Text(
               'Register as a Rider',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontFamily: 'Brand Bold',
               ),
@@ -80,15 +80,15 @@ class SignUpScreen extends StatelessWidget {
     return TextField(
       cursorColor: Colors.black54,
       textCapitalization: TextCapitalization.words,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         focusedBorder:
-            UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-        icon: Icon(
+            const UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+        icon: const Icon(
           Icons.person,
           color: Colors.black54,
         ),
         hintText: 'Name',
-        hintStyle: TextStyle(fontFamily: 'Brand-Regular'),
+        hintStyle: const TextStyle(fontFamily: 'Brand-Regular'),
       ),
       controller: _nameController,
     );
@@ -98,15 +98,15 @@ class SignUpScreen extends StatelessWidget {
     return TextField(
       cursorColor: Colors.black54,
       keyboardType: TextInputType.phone,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         focusedBorder:
-            UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-        icon: Icon(
+            const UnderlineInputBorder(borderSide: const BorderSide(color: Colors.black)),
+        icon: const Icon(
           Icons.phone,
           color: Colors.black54,
         ),
         hintText: 'Phone',
-        hintStyle: TextStyle(fontFamily: 'Brand-Regular'),
+        hintStyle: const TextStyle(fontFamily: 'Brand-Regular'),
       ),
       controller: _phoneController,
     );
@@ -116,15 +116,15 @@ class SignUpScreen extends StatelessWidget {
     return TextField(
       keyboardType: TextInputType.emailAddress,
       cursorColor: Colors.black54,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         focusedBorder:
-            UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+            const UnderlineInputBorder(borderSide: const BorderSide(color: Colors.black)),
         icon: Icon(
           Icons.email,
           color: Colors.black54,
         ),
         hintText: 'Email',
-        hintStyle: TextStyle(fontFamily: 'Brand-Regular'),
+        hintStyle: const TextStyle(fontFamily: 'Brand-Regular'),
       ),
       controller: _emailController,
     );
@@ -134,16 +134,16 @@ class SignUpScreen extends StatelessWidget {
     return TextField(
       obscureText: true,
       cursorColor: Colors.black54,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         focusColor: Colors.black,
         focusedBorder:
-            UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-        icon: Icon(
+        const UnderlineInputBorder(borderSide: const BorderSide(color: Colors.black)),
+        icon: const Icon(
           Icons.vpn_key,
           color: Colors.black54,
         ),
         hintText: 'Password',
-        hintStyle: TextStyle(fontFamily: 'Brand-Regular'),
+        hintStyle: const TextStyle(fontFamily: 'Brand-Regular'),
       ),
       controller: _passwordController,
     );
@@ -200,9 +200,9 @@ class SignUpScreen extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         textColor: Colors.white,
         color: Colors.yellow,
-        child: Text(
+        child: const Text(
           'Register',
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18,
             fontFamily: 'Brand Bold',
           ),
@@ -218,9 +218,9 @@ class SignUpScreen extends StatelessWidget {
             CupertinoPageRoute(builder: (ctx) => LoginScreen()),
             (route) => false);
       },
-      child: Text(
+      child: const Text(
         'Already have an Account? Login Here.',
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'Brand Bold',
         ),
       ),

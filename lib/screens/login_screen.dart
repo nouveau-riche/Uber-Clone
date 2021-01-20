@@ -32,9 +32,9 @@ class LoginScreen extends StatelessWidget {
             SizedBox(
               height: mq.height * 0.01,
             ),
-            Text(
+            const Text(
               'Login as a Rider',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontFamily: 'Brand Bold',
               ),
@@ -43,7 +43,7 @@ class LoginScreen extends StatelessWidget {
               height: mq.height * 0.03,
             ),
             Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -70,15 +70,15 @@ class LoginScreen extends StatelessWidget {
     return TextField(
       keyboardType: TextInputType.emailAddress,
       cursorColor: Colors.black54,
-      decoration: InputDecoration(
-        focusedBorder:
-            UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-        icon: Icon(
+      decoration: const InputDecoration(
+        focusedBorder: const UnderlineInputBorder(
+            borderSide: const BorderSide(color: Colors.black)),
+        icon: const Icon(
           Icons.email,
           color: Colors.black54,
         ),
         hintText: 'Email',
-        hintStyle: TextStyle(fontFamily: 'Brand-Regular'),
+        hintStyle: const TextStyle(fontFamily: 'Brand-Regular'),
       ),
       controller: _emailController,
     );
@@ -88,16 +88,16 @@ class LoginScreen extends StatelessWidget {
     return TextField(
       obscureText: true,
       cursorColor: Colors.black54,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         focusColor: Colors.black,
-        focusedBorder:
-            UnderlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-        icon: Icon(
+        focusedBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.black)),
+        icon: const Icon(
           Icons.vpn_key,
           color: Colors.black54,
         ),
         hintText: 'Password',
-        hintStyle: TextStyle(fontFamily: 'Brand-Regular'),
+        hintStyle: const TextStyle(fontFamily: 'Brand-Regular'),
       ),
       controller: _passwordController,
     );
@@ -109,10 +109,11 @@ class LoginScreen extends StatelessWidget {
       child: RaisedButton(
         onPressed: () {
           try {
-
-            showDialog(context: context,builder: (context){
-              return ProgressDialog('Signing in..');
-            });
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return ProgressDialog('Signing in..');
+                });
 
             if (!_emailController.text.contains('@') ||
                 _emailController.text.length <= 5) {
@@ -132,7 +133,7 @@ class LoginScreen extends StatelessWidget {
             } else if (error.toString().contains(
                 'password is invalid or the user does not have a password')) {
               errorMessage = 'Wrong Password';
-            }else if (error.toString().contains(
+            } else if (error.toString().contains(
                 'There is no user record corresponding to this identifier')) {
               errorMessage = 'User not found! Create new Account';
             }
@@ -146,9 +147,9 @@ class LoginScreen extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         textColor: Colors.white,
         color: Colors.yellow,
-        child: Text(
+        child: const Text(
           'Login',
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 17,
             fontFamily: 'Brand Bold',
           ),
@@ -164,9 +165,9 @@ class LoginScreen extends StatelessWidget {
             CupertinoPageRoute(builder: (ctx) => SignUpScreen()),
             (route) => false);
       },
-      child: Text(
+      child: const Text(
         'Do not have an Account? Register Here.',
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'Brand Bold',
         ),
       ),

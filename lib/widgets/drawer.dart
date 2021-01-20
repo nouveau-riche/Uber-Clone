@@ -13,26 +13,28 @@ Widget buildDrawer(BuildContext context) {
             height: mq.height * 0.03,
             child: Row(
               children: [
-                SizedBox(
+                const SizedBox(
                   width: 2,
                 ),
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 35,
                   backgroundColor: Colors.black38,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 18,
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'Profile Name',
-                      style: TextStyle(fontFamily: 'Brand Bold', fontSize: 17),
+                      style: const TextStyle(
+                          fontFamily: 'Brand Bold', fontSize: 17),
                     ),
-                    Text(
+                    const Text(
                       'Visit Profile',
-                      style: TextStyle(fontFamily: 'Brand Bold', fontSize: 16),
+                      style: const TextStyle(
+                          fontFamily: 'Brand Bold', fontSize: 16),
                     ),
                   ],
                 ),
@@ -40,16 +42,16 @@ Widget buildDrawer(BuildContext context) {
             ),
           ),
           curve: Curves.fastOutSlowIn),
-      buildDrawerListTile('History', Icon(Icons.history)),
-      buildDrawerListTile('Visit Profile', Icon(Icons.person)),
-      buildDrawerListTile('About', Icon(Icons.info)),
+      buildDrawerListTile('History', const Icon(Icons.history)),
+      buildDrawerListTile('Visit Profile', const Icon(Icons.person)),
+      buildDrawerListTile('About', const Icon(Icons.info)),
       GestureDetector(
           onTap: () {
             signOut();
             Navigator.of(context).pushNamedAndRemoveUntil(
                 LoginScreen.screenId, (route) => false);
           },
-          child: buildDrawerListTile('Log Out', Icon(Icons.logout))),
+          child: buildDrawerListTile('Log Out', const Icon(Icons.logout))),
     ],
   );
 }
@@ -59,7 +61,7 @@ Widget buildDrawerListTile(String title, Icon icon) {
     leading: icon,
     title: Text(
       title,
-      style: TextStyle(fontFamily: 'Brand Bold'),
+      style: const TextStyle(fontFamily: 'Brand Bold'),
     ),
   );
 }
