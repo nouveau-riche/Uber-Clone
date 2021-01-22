@@ -107,7 +107,7 @@ class LoginScreen extends StatelessWidget {
     return SizedBox(
       width: width,
       child: RaisedButton(
-        onPressed: () {
+        onPressed: () async {
           try {
             showDialog(
                 context: context,
@@ -120,7 +120,7 @@ class LoginScreen extends StatelessWidget {
               buildToast('Enter Correct Email');
               return;
             }
-            signIn(
+            await signIn(
                 context: context,
                 email: _emailController.text,
                 password: _passwordController.text);
@@ -168,7 +168,8 @@ class LoginScreen extends StatelessWidget {
       child: const Text(
         'Do not have an Account? Register Here.',
         style: const TextStyle(
-          fontFamily: 'Brand Bold',
+          fontSize: 13,
+          fontFamily: 'Brand-Regular',
         ),
       ),
     );

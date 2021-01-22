@@ -20,6 +20,7 @@ Future<void> signIn(
           .pushNamedAndRemoveUntil(HomeScreen.screenId, (route) => false);
     }
   } catch (error) {
+    print(error);
     throw HttpException(error.toString());
   }
 }

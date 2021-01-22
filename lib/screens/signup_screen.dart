@@ -153,7 +153,7 @@ class SignUpScreen extends StatelessWidget {
     return SizedBox(
       width: width,
       child: RaisedButton(
-        onPressed: () {
+        onPressed: () async {
           try {
             if (_passwordController.text.length <= 5) {
               buildToast('Password length should be more than 5');
@@ -174,7 +174,7 @@ class SignUpScreen extends StatelessWidget {
               return ProgressDialog('Signing in..');
             });
 
-            signUp(
+            await signUp(
                 context: context,
                 name: _nameController.text,
                 phone: _phoneController.text,

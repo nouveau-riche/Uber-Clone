@@ -1,9 +1,15 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../widgets/drawer.dart';
+import '../provider/provider.dart';
+import '../services/map_methods.dart';
+import '../screens/search_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   static const screenId = './home_screen';
@@ -19,6 +25,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   var bottomMapPadding = 0.0;
+
+  final User user = FirebaseAuth.instance.currentUser;
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -37,6 +45,9 @@ class _HomeScreenState extends State<HomeScreen> {
     _newGoogleMapController.animateCamera(
       CameraUpdate.newCameraPosition(cameraPosition),
     );
+
+    String address =
+        await MapMethods.getAddressFromCoordinates(position, context);
   }
 
   @override
@@ -64,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               locatePosition();
               setState(() {
-                bottomMapPadding = mq.height * 0.45;
+                bottomMapPadding = mq.height * 0.4;
               });
             },
           ),
@@ -77,8 +88,13 @@ class _HomeScreenState extends State<HomeScreen> {
             bottom: 0,
             left: 0,
             right: 0,
-            child: buildChooseAddress(context),
+            child: buildBottomAddressBox(context, user),
           ),
+          Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: buildBottomFareEstimateBox()),
         ],
       ),
     );
@@ -112,10 +128,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  buildChooseAddress(BuildContext context) {
+  buildBottomAddressBox(BuildContext context, User user) {
+    String name = user.displayName;
+    var firstName = name.split(' ');
+
     final mq = MediaQuery.of(context).size;
     return Container(
-      height: mq.height * 0.45,
+      height: mq.height * 0.4,
       padding: const EdgeInsets.all(15),
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
@@ -137,8 +156,8 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Hi there',
+              Text(
+                'Hi ${firstName[0]}!',
                 style: const TextStyle(fontFamily: 'Brand-Regular'),
               ),
               const Text(
@@ -151,28 +170,34 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(
             height: 14,
           ),
-          Container(
-            height: mq.height * 0.05,
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-              color: Colors.white,
-              boxShadow: [
-                const BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 2,
-                    spreadRadius: 2,
-                    offset: Offset.zero),
-              ],
-            ),
-            child: Row(
-              children: [
-                const Icon(Icons.search),
-                const Text(
-                  'Search Drop Off',
-                  style: const TextStyle(fontFamily: 'Brand Bold'),
-                ),
-              ],
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context)
+                  .push(CupertinoPageRoute(builder: (ctx) => SearchScreen()));
+            },
+            child: Container(
+              height: mq.height * 0.05,
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                color: Colors.white,
+                boxShadow: [
+                  const BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 2,
+                      spreadRadius: 2,
+                      offset: Offset.zero),
+                ],
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.search),
+                  const Text(
+                    'Search Drop Off',
+                    style: const TextStyle(fontFamily: 'Brand Bold'),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(
@@ -191,10 +216,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    'Add Home',
-                    style:
-                        const TextStyle(fontSize: 17, fontFamily: 'Brand Bold'),
+                  Container(
+                    width: mq.width * 0.8,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Text(
+                        Provider.of<DataProvider>(context).pickUpLocation !=
+                                null
+                            ? Provider.of<DataProvider>(context)
+                                .pickUpLocation
+                                .placeName
+                            : 'Add Home',
+                        style: const TextStyle(
+                            fontSize: 17, fontFamily: 'Brand Bold'),
+                      ),
+                    ),
                   ),
                   const Text(
                     'Your living home address',
@@ -248,5 +284,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  buildBottomFareEstimateBox() {
+    return Container();
   }
 }
