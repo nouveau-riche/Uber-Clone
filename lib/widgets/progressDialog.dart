@@ -26,11 +26,11 @@ class ProgressDialog extends StatelessWidget {
               valueColor: AlwaysStoppedAnimation(Colors.black),
             ),
             const SizedBox(
-              width: 20,
+              width: 10,
             ),
             Text(
               message,
-              style: const TextStyle(fontFamily: 'Brand-Regular', fontSize: 17),
+              style: const TextStyle(fontFamily: 'Brand-Regular', fontSize: 15),
             ),
           ],
         ),

@@ -61,4 +61,13 @@ class MapMethods {
 
     return directionDetail;
   }
+
+  static int calculateFares(DirectionDetail directionDetail) {
+    double timeTravelFare = (directionDetail.durationValue / 60) * 10;
+    double distanceTraveledFare = (directionDetail.distanceValue / 1000) * 10;
+
+    double totalFare = timeTravelFare + distanceTraveledFare;
+
+    return totalFare.truncate();
+  }
 }

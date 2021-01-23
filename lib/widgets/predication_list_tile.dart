@@ -62,7 +62,9 @@ class PredicationListTile extends StatelessWidget {
       model.latitude = res['result']['geometry']['location']['lat'];
       model.longitude = res['result']['geometry']['location']['lng'];
 
-      Provider.of<DataProvider>(context).updateDropOffLocationAddress(model);
+      Provider.of<DataProvider>(context,listen: false).updateDropOffLocationAddress(model);
+
+      Navigator.of(context).pop('obtainedDirection');
     }
   }
 }
