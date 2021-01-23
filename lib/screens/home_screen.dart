@@ -8,11 +8,13 @@ import 'package:uberrider/models/direction_detail.dart';
 import 'package:uberrider/widgets/progressDialog.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 import '../widgets/drawer.dart';
 import '../provider/provider.dart';
 import '../services/map_methods.dart';
 import '../screens/search_screen.dart';
+import '../services/query.dart';
 
 class HomeScreen extends StatefulWidget {
   static const screenId = './home_screen';
@@ -40,10 +42,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   double rideDetailContainerHeight = 0;
   double searchContainerHeight = 300;
+  double requestRideContainerHeight = 0;
 
   DirectionDetail tripDirectionDetails;
 
   bool openDrawer = true;
+
+  @override
+  void initState() {
+    super.initState();
+    MapMethods.getCurrentOnlineUser();
+  }
 
   void displayRideDetailContainer() async {
     await getPlaceDirection();
@@ -53,6 +62,18 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       searchContainerHeight = 0;
       openDrawer = false;
     });
+  }
+
+  final ref = db.collection('ride request').doc();
+
+  void displayRequestRideContainer() {
+    setState(() {
+      requestRideContainerHeight = 300;
+      searchContainerHeight = 0;
+      rideDetailContainerHeight = 0;
+    });
+
+    saveRideRequest(context, ref);
   }
 
   GoogleMapController _newGoogleMapController;
@@ -76,6 +97,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   resetApp() {
     setState(() {
       rideDetailContainerHeight = 0;
+      requestRideContainerHeight = 0;
       searchContainerHeight = 300;
       openDrawer = true;
 
@@ -138,26 +160,26 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       polylineSet.add(polyline);
     });
 
-//    LatLngBounds latLngBounds;
-//    if (pickUpLatLng.latitude > dropOffLatLng.latitude &&
-//        pickUpLatLng.longitude > dropOffLatLng.longitude) {
-//      latLngBounds =
-//          LatLngBounds(southwest: dropOffLatLng, northeast: pickUpLatLng);
-//    } else if (pickUpLatLng.latitude > dropOffLatLng.latitude) {
-//      latLngBounds = LatLngBounds(
-//          southwest: LatLng(dropOffLatLng.latitude, dropOffLatLng.longitude),
-//          northeast: LatLng(pickUpLatLng.latitude, pickUpLatLng.longitude));
-//    } else if (pickUpLatLng.longitude > dropOffLatLng.longitude) {
-//      latLngBounds = LatLngBounds(
-//          southwest: LatLng(pickUpLatLng.latitude, pickUpLatLng.longitude),
-//          northeast: LatLng(dropOffLatLng.latitude, dropOffLatLng.longitude));
-//    } else {
-//      latLngBounds =
-//          LatLngBounds(southwest: pickUpLatLng, northeast: dropOffLatLng);
-//    }
+    LatLngBounds latLngBounds;
+    if (pickUpLatLng.latitude > dropOffLatLng.latitude &&
+        pickUpLatLng.longitude > dropOffLatLng.longitude) {
+      latLngBounds =
+          LatLngBounds(southwest: dropOffLatLng, northeast: pickUpLatLng);
+    } else if (pickUpLatLng.longitude > dropOffLatLng.longitude) {
+      latLngBounds = LatLngBounds(
+          southwest: LatLng(pickUpLatLng.latitude, dropOffLatLng.longitude),
+          northeast: LatLng(dropOffLatLng.latitude, pickUpLatLng.longitude));
+    } else if (pickUpLatLng.latitude > dropOffLatLng.latitude) {
+      latLngBounds = LatLngBounds(
+          southwest: LatLng(dropOffLatLng.latitude, pickUpLatLng.longitude),
+          northeast: LatLng(pickUpLatLng.latitude, dropOffLatLng.longitude));
+    } else {
+      latLngBounds =
+          LatLngBounds(southwest: pickUpLatLng, northeast: dropOffLatLng);
+    }
 
-//    _newGoogleMapController
-//        .animateCamera(CameraUpdate.newLatLngBounds(latLngBounds, 70));
+    _newGoogleMapController
+        .animateCamera(CameraUpdate.newLatLngBounds(latLngBounds, 70));
 
     Marker pickUpLocationMarker = Marker(
       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
@@ -251,6 +273,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             bottom: 0,
             child: buildBottomFareEstimateBox(context),
           ),
+          Positioned(
+            child: buildRequestRide(),
+            left: 0,
+            bottom: 0,
+            right: 0,
+          )
         ],
       ),
     );
@@ -553,7 +581,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 height: 15,
               ),
               RaisedButton(
-                onPressed: () {},
+                onPressed: () {
+                  displayRequestRideContainer();
+                },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -575,6 +605,91 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  buildRequestRide() {
+    return AnimatedSize(
+      vsync: this,
+      curve: Curves.bounceIn,
+      duration: Duration(milliseconds: 260),
+      child: Container(
+        height: requestRideContainerHeight,
+        padding: const EdgeInsets.all(15),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+              topLeft: const Radius.circular(10),
+              topRight: const Radius.circular(10)),
+          color: Colors.white,
+          boxShadow: [
+            const BoxShadow(
+                color: Colors.black38,
+                blurRadius: 6,
+                spreadRadius: 6,
+                offset: Offset.zero),
+          ],
+        ),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: ColorizeAnimatedTextKit(
+                onTap: () {
+                  print("Tap Event");
+                },
+                text: [
+                  "Requesting a Ride",
+                  "Please wait",
+                  "Finding a Driver...",
+                ],
+                textStyle: TextStyle(fontSize: 55, fontFamily: "Signatra"),
+                colors: [
+                  Colors.green,
+                  Colors.purple,
+                  Colors.blue,
+                  Colors.pink,
+                  Colors.yellow,
+                  Colors.red,
+                ],
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            GestureDetector(
+              onTap: () {
+                deleteRideRequest(ref);
+                resetApp();
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    height: 38,
+                    width: 38,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: Colors.black12),
+                    ),
+                    child: Icon(Icons.clear),
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    'Cancel Ride',
+                    style: TextStyle(fontFamily: 'Brand-Regular', fontSize: 12),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

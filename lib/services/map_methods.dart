@@ -1,14 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:uberrider/models/direction_detail.dart';
 
+import '../models/address_model.dart';
+import '../models/direction_detail.dart';
 import '../services/http_request.dart';
 import '../provider/provider.dart';
-import '../models/address_model.dart';
 import '../services/config_map.dart';
+import '../models/user_model.dart';
 
 class MapMethods {
   static Future<String> getAddressFromCoordinates(
@@ -69,5 +72,19 @@ class MapMethods {
     double totalFare = timeTravelFare + distanceTraveledFare;
 
     return totalFare.truncate();
+  }
+
+  static void getCurrentOnlineUser() async {
+    User currentUser = FirebaseAuth.instance.currentUser;
+
+    String uid = currentUser.uid;
+
+    final ref = FirebaseFirestore.instance.collection('users').doc(uid);
+
+    ref.get().then((value) {
+      if (value.exists) {
+        user = Users.fromSnapshot(value);
+      }
+    });
   }
 }
